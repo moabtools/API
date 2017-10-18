@@ -17,9 +17,9 @@ namespace ApiTest
         static void Main(string[] args)
         {
 
-            //CreateTask1();
+            CreateTask1();
             //CreateTask2();
-            CreateTask3();
+            //CreateTask3();
         }
 
         static void CreateTask1()
@@ -27,22 +27,11 @@ namespace ApiTest
 
             // создадим задание на парсинг WordstatDeep
             // параметры по умолчанию - смотрим конструктор Task
-            // параметры соответствуют действию человека "зашел в сервис, ввёл фразу, нажал «Получить фразы», не вникая в тонкие настройки сервиса
+            // параметры соответствуют действию человека "зашел в сервис, ввёл фразу, нажал «Получить фразы», 
+            // не вникая в тонкие настройки сервиса
             Task task = new Task();
-            task.phrases_list.Add("автострахование краснодар");
-            var task_valid = task.Validate(); // валидируем задание перед отправкой
-            if (task_valid != null)
-            {
-                // если задание невалидно - дадим знать об этом пользователю
-                Console.ForegroundColor = ConsoleColor.Red;
-                foreach (var v in task_valid)
-                {
-                    Console.WriteLine(v.ErrorMessage);
-                }
-                Console.ReadKey();
-                return;
-            }
-
+            task.phrases_list.Add("автострахование краснодар!");
+            
             // если задание валидно - отправляем задание
             Console.WriteLine("Отправляем задание");
 
@@ -50,10 +39,10 @@ namespace ApiTest
             Request req = new Request();
             req.task = task;
             req.api_key = api_key;
-            var req_valid = req.Validate(); // валидируем запрос
+            var req_valid = req.Validate(); // валидируем запрос и задание
             if (req_valid != null)
             {
-                // если запрос невалидный - дадим знать об этом пользователю
+                // если запрос или задание невалидны - дадим знать об этом пользователю
                 Console.ForegroundColor = ConsoleColor.Red;
                 foreach (var r in req_valid)
                 {
