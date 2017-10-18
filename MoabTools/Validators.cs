@@ -62,7 +62,9 @@ namespace MoabTools
             RuleFor(task => task.syntax).IsInEnum();
             RuleFor(task => task.syntax).Equal(Syntax.NoQuotes).When(task => task.type == TaskType.WordstatDeep || task.type == TaskType.Suggests);
 
-            RuleFor(task => task.depth).GreaterThanOrEqualTo(1).LessThanOrEqualTo(2);
+            RuleFor(task => task.depth).GreaterThanOrEqualTo(1).When(task => task.type == TaskType.WordstatDeep);
+            RuleFor(task => task.depth).LessThanOrEqualTo(2).When(task => task.type == TaskType.WordstatDeep);
+
             RuleFor(task => task.depth).Equal(1).When(task => task.type == TaskType.DirectCheck || task.type == TaskType.Suggests);
 
             RuleFor(task => task.db).IsInEnum();
