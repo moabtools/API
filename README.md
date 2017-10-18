@@ -117,8 +117,8 @@ download_zip  | строка | При статусах 2, 3 или 4 верне�
 
 Зависимости:
 
-* FluentValidation - https://github.com/JeremySkinner/FluentValidation/
-* Newtowsoft.Json - https://github.com/JamesNK/Newtonsoft.Json
+* [FluentValidation](https://github.com/JeremySkinner/FluentValidation/)
+* [Newtowsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
 
 Возможности библиотеки:
 
@@ -175,7 +175,6 @@ catch (WebException ex)
     throw;
 }
 
-
 var id = ans.ids[0];
             
 // создадим запрос на проверку статуса задания
@@ -195,7 +194,6 @@ if (chk_valid != null)
     Console.ReadKey();
     return;
 }
-
 
 // раз в 5 сек отправляем запрос на проверку статуса задания
 CheckAnswer chk_ans;
@@ -225,7 +223,6 @@ while (true)
 
 }
             
-
 Console.ReadKey();
 
 ```
