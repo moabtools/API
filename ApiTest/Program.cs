@@ -30,7 +30,7 @@ namespace ApiTest
             // параметры соответствуют действию человека "зашел в сервис, ввёл фразу, нажал «Получить фразы», 
             // не вникая в тонкие настройки сервиса
             Task task = new Task();
-            task.phrases_list.Add("автострахование краснодар!");
+            task.phrases_list.Add("автострахование питер");
             
             // если задание валидно - отправляем задание
             Console.WriteLine("Отправляем задание");
@@ -67,8 +67,7 @@ namespace ApiTest
                 // todo
                 throw;
             }
-
-
+            
             var id = ans.ids[0];
             
             // создадим запрос на проверку статуса задания
@@ -88,8 +87,7 @@ namespace ApiTest
                 Console.ReadKey();
                 return;
             }
-
-
+            
             // раз в 5 сек отправляем запрос на проверку статуса задания
             CheckAnswer chk_ans;
 
@@ -118,7 +116,6 @@ namespace ApiTest
 
             }
             
-
             Console.ReadKey();
 
         }
@@ -146,18 +143,6 @@ namespace ApiTest
             task.also_suggests = false;
             task.also_check = false;
 
-            var task_valid = task.Validate();
-            if (task_valid != null)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                foreach (var v in task_valid)
-                {
-                    Console.WriteLine(v.ErrorMessage);
-                }
-                Console.ReadKey();
-                return;
-            }
-
             Console.WriteLine("Отправляем задание");
 
             Request req = new Request();
@@ -183,13 +168,11 @@ namespace ApiTest
             }
             catch (WebException ex)
             {
-
                 var resp = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
                 dynamic err = JsonConvert.DeserializeObject(resp.ToString());
 
                 throw;
             }
-
 
             foreach (int id in ans.ids)
             {
@@ -228,8 +211,7 @@ namespace ApiTest
 
             Console.ReadKey();
         }
-
-
+        
         static void CreateTask3()
         {
 
@@ -253,18 +235,6 @@ namespace ApiTest
             task.also_check = false;
             task.suggests_depth = 2;
             task.suggests_types.Add(SuggestType.PhraseAndDigits); // по умолчанию там уже есть PhraseAndSpace, см. конструктор
-
-            var task_valid = task.Validate();
-            if (task_valid != null)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                foreach (var v in task_valid)
-                {
-                    Console.WriteLine(v.ErrorMessage);
-                }
-                Console.ReadKey();
-                return;
-            }
 
             Console.WriteLine("Отправляем задание");
 
@@ -291,14 +261,12 @@ namespace ApiTest
             }
             catch (WebException ex)
             {
-
                 var resp = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
                 dynamic err = JsonConvert.DeserializeObject(resp.ToString());
 
                 throw;
             }
-
-
+            
             foreach (int id in ans.ids)
             {
 

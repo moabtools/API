@@ -1,5 +1,6 @@
 ﻿using FluentValidation.Results;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +42,7 @@ namespace MoabTools
             RequestAnswer answer;
             try
             {
-                answer = JsonConvert.DeserializeObject<RequestAnswer>(s);
+                answer = JsonConvert.DeserializeObject<RequestAnswer>(JToken.Parse(s).ToString());
             }
             catch (Exception)
             {
