@@ -12,7 +12,7 @@ namespace ApiTest
 {
     class Program
     {
-        static string api_key = "0fa37306-4c79-4c87-9d68-79868abefe36"; // ваш API-ключ
+        static string api_key = ""; // ваш API-ключ
 
         static void Main(string[] args)
         {
