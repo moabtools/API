@@ -110,3 +110,130 @@ errors  | массив строк | Массив описаний ошибок<b
 ------------- | ------------- | -------------
 status  | число | Статус проверяемого задания<br>0 – новое<br/>1 – выполняется<br/>2 – завершено<br/>3 – приостановлено пользователем<br/>4 – приостановлено из-за нехватки баланса
 download_zip  | строка | При статусах 2, 3 или 4 вернется абсолютный путь на скачивание готовой или приостановленной выборки. Если выборка в статусе «новая» или «выполняется» – вернется null.
+
+## Готовая динамическая библиотека для работы с API (beta)
+
+Библиотека написана на C#, распространяется в виде исходных кодов. Для работы с ней сохраните этот репозиторий в Zip-файл, откройте его в Visual Studio версии не ниже 2015 и скомпилируйте, затем добавьте ссылку на MoabTools.dll в ваш проект.
+
+Зависимости:
+
+* FluentValidation - https://github.com/JeremySkinner/FluentValidation/
+* Newtowsoft.Json - https://github.com/JamesNK/Newtonsoft.Json
+
+Возможности библиотеки:
+
+* Создание и отправка задания
+* Валидация задания перед отправкой
+* Проверка статуса задания
+* Наличие тестового проекта, в коде которого можно посмотреть примеры использования библиотеки
+
+### Как пользоваться библиотекой
+
+Чтобы создать задание, выполните следующий код:
+
+```c#
+// создадим задание на парсинг WordstatDeep
+// параметры по умолчанию - смотрим конструктор Task
+// параметры соответствуют действию человека "зашел в сервис, ввёл фразу, нажал «Получить фразы», не вникая в тонкие настройки сервиса
+Task task = new Task();
+task.phrases_list.Add("автострахование краснодар");
+var task_valid = task.Validate(); // валидируем задание перед отправкой
+if (task_valid != null)
+{
+    // если задание невалидно - дадим знать об этом пользователю
+    Console.ForegroundColor = ConsoleColor.Red;
+    foreach (var v in task_valid)
+    {
+        Console.WriteLine(v.ErrorMessage);
+    }
+    Console.ReadKey();
+    return;
+}
+
+// если задание валидно - отправляем задание
+Console.WriteLine("Отправляем задание");
+
+// создадим запрос на добавление задания
+Request req = new Request();
+req.task = task;
+req.api_key = api_key;
+var req_valid = req.Validate(); // валидируем запрос
+if (req_valid != null)
+{
+    // если запрос невалидный - дадим знать об этом пользователю
+    Console.ForegroundColor = ConsoleColor.Red;
+    foreach (var r in req_valid)
+    {
+        Console.WriteLine(r.ErrorMessage);
+    }
+    Console.ReadKey();
+    return;
+}
+
+// отправляем запрос на добавление задания
+RequestAnswer ans;
+
+try
+{
+    ans = req.Send();
+}
+catch (WebException ex)
+{
+    // если вернулся ответ 400 - разберем его и покажем пользователю ошибки
+    var resp = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
+    dynamic err = JsonConvert.DeserializeObject(resp.ToString());
+    // todo
+    throw;
+}
+
+var id = ans.ids[0];
+            
+// создадим запрос на проверку статуса задания
+Check chk = new Check();
+chk.id = id;
+chk.api_key = api_key;
+
+var chk_valid = chk.Validate();
+if (chk_valid != null)
+{
+    // если запрос невалидный - дадим знать об этом пользователю
+    Console.ForegroundColor = ConsoleColor.Red;
+    foreach (var c in chk_valid)
+    {
+        Console.WriteLine(c.ErrorMessage);
+    }
+    Console.ReadKey();
+    return;
+}
+
+
+// раз в 5 сек отправляем запрос на проверку статуса задания
+CheckAnswer chk_ans;
+
+while (true)
+{
+
+    Thread.Sleep(5000);
+
+    Console.WriteLine($"Проверяем статус задания {id}");
+
+    try
+    {
+        chk_ans = chk.Send();
+    }
+    catch (Exception)
+    {
+        continue;
+    }
+
+    if (chk_ans.status == 2 || chk_ans.status == 3 || chk_ans.status == 4)
+    {
+        Console.WriteLine("Скачиваем готовую выборку");
+        // todo
+        break;
+    }
+
+}
+```
+
+По всем вопросам, связанным с интеграцией API Moab Tools в вашу систему, вы можете обращаться в техподдержку сервиса http://tools.moab.pro/Support
