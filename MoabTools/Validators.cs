@@ -9,7 +9,6 @@ using System.Text.RegularExpressions;
 namespace MoabTools
 {
 
-
     public class RequestValidator : AbstractValidator<Request>
     {
         public RequestValidator()
@@ -26,6 +25,22 @@ namespace MoabTools
             Guid result;
             return Guid.TryParse(guid, out result);
         }
+    }
+
+    public class TasksListValidator : AbstractValidator<TasksList>
+    {
+        public TasksListValidator()
+        {
+            RuleFor(list => list.api_key).NotNull().WithMessage("API-ключ не может быть пустым");
+            RuleFor(list => list.api_key).Must(BeAValidGuid).WithMessage("API-ключ передан в неверном формате");
+        }
+
+        private bool BeAValidGuid(string guid)
+        {
+            Guid result;
+            return Guid.TryParse(guid, out result);
+        }
+
     }
 
     public class CheckValidator : AbstractValidator<Check>

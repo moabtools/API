@@ -48,9 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Answer.cs" />
+    <Compile Include="Classes\Request.cs" />
     <Compile Include="Classes\Check.cs" />
     <Compile Include="Classes\Task.cs" />
+    <Compile Include="Classes\TasksList.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="ExtendedWebClient.cs">
       <SubType>Component</SubType>

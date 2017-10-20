@@ -17,9 +17,58 @@ namespace ApiTest
         static void Main(string[] args)
         {
 
-            CreateTask1();
+            TasksList();
+            //CreateTask1();
             //CreateTask2();
             //CreateTask3();
+        }
+
+
+        static void TasksList()
+        {
+
+            // получим список выборок
+            TasksList list = new TasksList();
+            list.api_key = api_key;
+            list.type = TaskType.WordstatDeep;
+            list.page = 1;
+
+            var list_valid = list.Validate(); // валидируем запрос
+            if (list_valid != null)
+            {
+                // если запрос невалиден - дадим знать об этом пользователю
+                Console.ForegroundColor = ConsoleColor.Red;
+                foreach (var r in list_valid)
+                {
+                    Console.WriteLine(r.ErrorMessage);
+                }
+                Console.ReadKey();
+                return;
+            }
+
+            // отправляем запрос на получение списка заданий
+            TasksListAnswer ans;
+
+            try
+            {
+                ans = list.List();
+            }
+            catch (WebException ex)
+            {
+                // если вернулся ответ 400 - разберем его и покажем пользователю ошибки
+                var resp = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
+                dynamic err = JsonConvert.DeserializeObject(resp.ToString());
+                // todo
+                throw;
+            }
+
+            // покажем пользователю задания
+            foreach(Task task in ans.tasks_list)
+            {
+                Console.WriteLine($"{task.full_name} - {task.status}");
+            }
+
+            Console.ReadLine();
         }
 
         static void CreateTask1()

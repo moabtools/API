@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,14 @@ namespace MoabTools
         public TaskType type { get; set; }
         public List<string> minus_words { get; set; }
         public List<SuggestType> suggests_types { get; set; }
-        public int suggests_depth { get; set; }
+        public Nullable<int> suggests_depth { get; set; }
+
+        public int id { get; set; }
+        public DateTime date_created { get; set; }
+        public DateTime date_finished { get; set; }
+        public int status { get; set; }
+        public decimal summ { get; set; }
+        public string full_name { get; set; }
 
         public IList<ValidationFailure> Validate()
         {
