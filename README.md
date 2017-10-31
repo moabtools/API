@@ -217,7 +217,15 @@ catch (WebException ex)
     throw;
 }
 
-var id = ans.ids[0];
+if(ans.exists_ids != null)
+{
+    // задание с такими параметрами уже существует у пользователя 
+    // в массиве exists_ids присутствует id
+    // вернем ошибку или скачаем, если готово, при помощи функции Check
+    return;
+}
+
+var id = ans.added_ids[0];
             
 // создадим запрос на проверку статуса задания
 Check chk = new Check();
