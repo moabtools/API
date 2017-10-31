@@ -77,7 +77,8 @@ namespace MoabTools
     public class RequestAnswer
     {
         public int total_pages { get; set; }
-        public List<int> ids { get; set; }
+        public List<int> added_ids { get; set; }
+        public List<int> exists_ids { get; set; }
         public List<string> errors { get; set; }
     }
 }

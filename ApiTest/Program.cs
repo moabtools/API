@@ -18,7 +18,7 @@ namespace ApiTest
         {
 
             TasksList();
-            //CreateTask1();
+            CreateTask1();
             //CreateTask2();
             //CreateTask3();
         }
@@ -117,7 +117,14 @@ namespace ApiTest
                 throw;
             }
             
-            var id = ans.ids[0];
+            if(ans.exists_ids != null)
+            {
+                // задание с такими параметрами уже существует у пользователя 
+                // в массиве exists_ids присутствует id
+                return;
+            }
+            
+            var id = ans.added_ids[0];
             
             // создадим запрос на проверку статуса задания
             Check chk = new Check();
@@ -223,7 +230,14 @@ namespace ApiTest
                 throw;
             }
 
-            foreach (int id in ans.ids)
+            if (ans.exists_ids != null)
+            {
+                // задание с такими параметрами уже существует у пользователя 
+                // в массиве exists_ids присутствует id
+                return;
+            }
+
+            foreach (int id in ans.added_ids)
             {
 
                 Check chk = new Check();
@@ -315,8 +329,15 @@ namespace ApiTest
 
                 throw;
             }
-            
-            foreach (int id in ans.ids)
+
+            if (ans.exists_ids != null)
+            {
+                // задание с такими параметрами уже существует у пользователя 
+                // в массиве exists_ids присутствует id
+                return;
+            }
+
+            foreach (int id in ans.added_ids)
             {
 
                 Check chk = new Check();

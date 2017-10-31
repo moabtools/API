@@ -37,7 +37,7 @@ namespace MoabTools
                 throw (new Exception("Запрос не прошел валидацию"));
             }
 
-            ExtendedWebClient wc = new ExtendedWebClient(5000);
+            ExtendedWebClient wc = new ExtendedWebClient(20000);
 
             string s;
             try
