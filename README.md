@@ -14,7 +14,8 @@
 ```javascript
 {
   task: tsk,
-  api_key: api_key
+  api_key: api_key,
+  partner_code: null
 }
 ```
 tsk – конструкция вида:
@@ -34,6 +35,8 @@ tsk – конструкция вида:
    suggests_types: [],
    suggests_depth: 1
 }
+
+partner_code - необязательное строковое поле, предназначенное для идентификации вашего решения в маркетинговых целях (согласовывается с техподдержкой). Пример: partner_code: "MyGreatSoftware". По умолчанию - null, при передаче JSON-конструкции поле можно не указывать.
 
 ```
 Описание полей:
