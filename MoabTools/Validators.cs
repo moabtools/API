@@ -9,6 +9,22 @@ using System.Text.RegularExpressions;
 namespace MoabTools
 {
 
+    public class RunPauseValidator : AbstractValidator<RunPauseTask>
+    {
+        public RunPauseValidator()
+        {
+            RuleFor(chk => chk.task_id).GreaterThan(0).WithMessage("ID задания должно быть больше 0");
+            RuleFor(chk => chk.api_key).NotNull().WithMessage("API-ключ не может быть пустым");
+            RuleFor(chk => chk.api_key).Must(BeAValidGuid).WithMessage("API-ключ передан в неверном формате");
+        }
+
+        private bool BeAValidGuid(string guid)
+        {
+            Guid result;
+            return Guid.TryParse(guid, out result);
+        }
+    }
+
     public class RequestValidator : AbstractValidator<Request>
     {
         public RequestValidator()
@@ -163,5 +179,6 @@ namespace MoabTools
             RuleFor(minus_word => minus_word).MaximumLength(200).WithMessage("Минус-слово '{PropertyValue}' не может быть длиннее 200 символов");
         }
     }
+
 
 }

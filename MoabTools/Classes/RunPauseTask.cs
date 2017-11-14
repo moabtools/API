@@ -1,5 +1,6 @@
 ﻿using FluentValidation.Results;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +9,12 @@ using System.Threading.Tasks;
 
 namespace MoabTools
 {
-
-    public class Check
+    public class RunPauseTask
     {
-        public int id { get; set; }
+        public int task_id { get; set; }
         public string api_key { get; set; }
 
-        public CheckAnswer Send()
+        public RequestAnswer Send(RunPauseEnum action)
         {
             if (Validate() != null)
             {
@@ -23,20 +23,32 @@ namespace MoabTools
 
             ExtendedWebClient wc = new ExtendedWebClient(5000);
 
-            string s;
+            string s = "";
             try
             {
-                s = wc.UploadString("http://tools.moab.pro/api/Parse/Check", this.ToString());
+                if (action == RunPauseEnum.Pause)
+                {
+                    s = wc.UploadString("http://tools.moab.pro/api/Parse/PauseTask", this.ToString());
+                } else if ( action == RunPauseEnum.Run )
+                {
+                    s = wc.UploadString("http://tools.moab.pro/api/Parse/RunTask", this.ToString());
+                }
             }
             catch (Exception)
             {
                 throw;
             }
 
-            CheckAnswer answer;
+            if(string.IsNullOrWhiteSpace(s))
+            {
+                // вернулась пустая строка - всё в порядке
+                return null;
+            }
+
+            RequestAnswer answer;
             try
             {
-                answer = JsonConvert.DeserializeObject<CheckAnswer>(s);
+                answer = JsonConvert.DeserializeObject<RequestAnswer>(JToken.Parse(s).ToString());
             }
             catch (Exception)
             {
@@ -54,7 +66,7 @@ namespace MoabTools
 
         public IList<ValidationFailure> Validate()
         {
-            CheckValidator validator = new CheckValidator();
+            RunPauseValidator validator = new RunPauseValidator();
             ValidationResult results = validator.Validate(this);
             if (!results.IsValid)
             {
@@ -68,13 +80,10 @@ namespace MoabTools
 
     }
 
-
-    public class CheckAnswer
+    public enum RunPauseEnum
     {
-        public int status { get; set; }
-        public int progress { get; set; }
-        public string download_zip { get; set; }
-        public int balance { get; set; }
-
+        Run,
+        Pause
     }
+
 }

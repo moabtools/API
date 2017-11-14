@@ -21,9 +21,13 @@ namespace ApiTest
             CreateTask1();
             //CreateTask2();
             //CreateTask3();
+            // приостановим задание
+            PauseTask(0); // вместо 0 подставляем id задания, полученное на этапе добавления
+            // запустим ранее приостановленное задание
+            RunTask(0);
         }
 
-
+        
         static void TasksList()
         {
 
@@ -374,5 +378,52 @@ namespace ApiTest
 
             Console.ReadKey();
         }
+
+        static void PauseTask(int task_id)
+        {
+            RunPauseTask rpt = new RunPauseTask();
+            rpt.task_id = task_id;
+            rpt.api_key = api_key;
+            
+            RequestAnswer answer;
+
+            try
+            {
+                answer = rpt.Send(RunPauseEnum.Pause);
+            }
+            catch (WebException ex)
+            {
+                // ошибка при приостановке задания, нужно вывести пользователю
+                var resp = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
+                dynamic err = JsonConvert.DeserializeObject(resp.ToString());
+                // todo
+                throw;
+            }
+
+        }
+
+        static void RunTask(int task_id)
+        {
+            RunPauseTask rpt = new RunPauseTask();
+            rpt.task_id = task_id;
+            rpt.api_key = api_key;
+            
+            RequestAnswer answer;
+
+            try
+            {
+                answer = rpt.Send(RunPauseEnum.Run);
+            }
+            catch (WebException ex)
+            {
+                // ошибка при запуске задания, нужно вывести пользователю
+                var resp = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
+                dynamic err = JsonConvert.DeserializeObject(resp.ToString());
+                // todo
+                throw;
+            }
+
+        }
+
     }
 }
