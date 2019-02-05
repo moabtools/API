@@ -15,7 +15,7 @@
 ## Техническое описание формата взаимодействия
 
 * Метод запроса: POST
-* URL запроса: http://tools.moab.pro/api/Register/Add
+* URL запроса: https://tools.moab.pro/api/Register/Add
 * Content-Type: application/json
 * HTTP-статус ответа: всегда 200
 * Кодировка: UTF-8
