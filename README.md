@@ -1,4 +1,4 @@
-# API tools.moab.pro (beta)
+# API moab.tools (beta)
 Описание API-интерфейса, библиотека и тестовый проект для взаимодействия с MOAB Tools
 
 ## Описание API
